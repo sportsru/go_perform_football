@@ -1,14 +1,18 @@
 package go_perform_football
 
+type BaseSeason struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+	LastUpdated string `json:"lastUpdated"`
+}
+
 type Season struct {
-	Id                string `json:"id"`
+	BaseSeason
 	IncludesVenues    string `json:"includesVenues"`
 	OcId              string `json:"ocId"`
-	Name              string `json:"name"`
-	StartDate         string `json:"startDate"`
-	EndDate           string `json:"endDate"`
 	Active            string `json:"active"`
-	LastUpdated       string `json:"lastUpdated"`
 	IncludesStandings string `json:"includesStandings"`
 }
 
