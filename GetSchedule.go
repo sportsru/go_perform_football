@@ -13,10 +13,9 @@ type MatchDate struct {
 }
 
 type Match struct {
-	Id            string `json:"id"`
+	BaseMatch
+
 	CoverageLevel string `json:"coverageLevel"`
-	Date          string `json:"date"`
-	Time          string `json:"time"`
 
 	HomeContestantId string `json:"homeContestantId"`
 	AwayContestantId string `json:"awayContestantId"`

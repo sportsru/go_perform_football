@@ -22,18 +22,22 @@ type Country struct {
 	CountryCode string `json:"countryCode"`
 }
 
+type BaseCompetition struct {
+	Id                string `json:"id"`
+	Name              string `json:"name"`
+	CompetitionCode   string `json:"competitionCode"`
+	CompetitionFormat string `json:"competitionFormat"`
+	Country           `json:"country"`
+}
+
 type Competition struct {
-	Id                 string   `json:"id"`
+	BaseCompetition
 	OcId               string   `json:"ocId"`
-	Name               string   `json:"name"`
-	CompetitionCode    string   `json:"competitionCode"`
 	DisplayOrder       int      `json:"displayOrder"`
 	IsFriendly         string   `json:"isFriendly"`
-	CompetitionFormat  string   `json:"competitionFormat"`
 	CompetitionType    string   `json:"competitionType"`
 	Type               string   `json:"type"`
 	TournamentCalendar []Season `json:"tournamentCalendar"`
-	Country
 }
 
 type GetTournaments struct {

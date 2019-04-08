@@ -74,11 +74,11 @@ func (c *Client) GetStanding(seasonId string) (GetStanding, error) {
 
 }
 
-func (c *Client) GetMatchStat(matchId string) (GetMatchStat, error) {
+func (c *Client) GetMatchStat(matchId string) (MatchStat, error) {
 
 	var (
 		url  string
-		res  GetMatchStat
+		res  MatchStat
 		err  error
 		body []byte
 	)
@@ -87,11 +87,11 @@ func (c *Client) GetMatchStat(matchId string) (GetMatchStat, error) {
 
 	fmt.Println(url)
 	if body, err = c.getUrl(url); err != nil {
-		return GetMatchStat{}, err
+		return MatchStat{}, err
 	}
 
 	if err = json.Unmarshal(body, &res); err != nil {
-		return GetMatchStat{}, err
+		return MatchStat{}, err
 	}
 
 	return res, nil

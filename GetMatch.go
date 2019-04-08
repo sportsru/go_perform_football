@@ -4,7 +4,7 @@ type GetMatch struct {
 	Match []DetailMatch `json:"match"`
 }
 
-type GetMatchStat struct {
+type MatchStat struct {
 	DetailMatch
 }
 
@@ -13,48 +13,55 @@ type DetailMatch struct {
 	LiveData  LiveData  `json:"liveData"`
 }
 
-type Event struct {
-	ContestantId string `json:"contestantId"`
-	PeriodId     int    `json:"periodId"`
-	TimeMin      int    `json:"timeMin"`
-	LastUpdated  string `json:"lastUpdated"`
+type BaseEvent struct {
+	ContestantId string  `json:"contestantId"`
+	PeriodId     int     `json:"periodId"`
+	TimeMin      int     `json:"timeMin"`
+	TimeMinSec   *string `json:"timeMinSec"`
+	LastUpdated  string  `json:"lastUpdated"`
+	OptaEventId  string  `json:"optaEventId"`
 }
 
 type Goal struct {
-	Event
-	Type             string `json:"type"`
-	ScorerId         string `json:"scorerId"`
-	ScorerName       string `json:"scorerName"`
-	AssistPlayerId   string `json:"assistNameId"`
-	AssistPlayerName string `json:"assistNameName"`
-	OptaEventId      string `json:"optaEventId"`
-	HomeScore        int    `json:"homeScore"`
-	AwayScore        int    `json:"awayScore"`
+	BaseEvent
+	Type             string  `json:"type"`
+	ScorerId         *string `json:"scorerId"`
+	ScorerName       *string `json:"scorerName"`
+	AssistPlayerId   *string `json:"assistPlayerId"`
+	AssistPlayerName *string `json:"assistPlayerName"`
+	HomeScore        *int    `json:"homeScore"`
+	AwayScore        *int    `json:"awayScore"`
 }
 
 type Card struct {
-	Event
-	Type        string `json:"type"`
-	PlayerId    string `json:"playerId"`
-	PlayerName  string `json:"playerName"`
-	OptaEventId string `json:"optaEventId"`
+	BaseEvent
+	Type        string  `json:"type"`
+	PlayerId    *string `json:"playerId"`
+	PlayerName  *string `json:"playerName"`
+	OptaEventId string  `json:"optaEventId"`
 }
 
 type Substitute struct {
-	Event
+	BaseEvent
 	PlayerOnId    string `json:"playerOnId"`
 	PlayerOnName  string `json:"playerOnName"`
 	PlayerOffId   string `json:"playerOffId"`
 	PlayerOffName string `json:"playerOffName"`
 }
 
+type BaseMatch struct {
+	Id   string `json:"id"`
+	Date string `json:"date"`
+	Time string `json:"time"`
+}
+
 type LiveData struct {
 	MatchDetails struct {
-		PeriodId       int    `json:"periodId"`
-		MatchStatus    string `json:"matchStatus"`
-		Winner         string `json:"winner"`
-		MatchLengthMin int    `json:"matchLengthMin"`
-		MatchLengthSec int    `json:"matchLengthSec"`
+		PeriodId       int     `json:"periodId"`
+		MatchStatus    string  `json:"matchStatus"`
+		Winner         *string `json:"winner"`
+		MatchLengthMin *int    `json:"matchLengthMin"`
+		MatchLengthSec *int    `json:"matchLengthSec"`
 		Period         []struct {
 			Id        int    `json:"id"`
 			Start     string `json:"start"`
@@ -62,28 +69,18 @@ type LiveData struct {
 			LengthMin int    `json:"lengthMin"`
 			LengthSec int    `json:"lengthSec"`
 		} `json:"period"`
-		Scores struct {
-			Ht struct {
-				Home int `json:"home"`
-				Away int `json:"away"`
-			} `json:"ht"`
-			Ft struct {
-				Home int `json:"home"`
-				Away int `json:"away"`
-			} `json:"ft"`
-			Total struct {
-				Home int `json:"home"`
-				Away int `json:"away"`
-			} `json:"total"`
+		Scores map[string]struct {
+			Home int `json:"home"`
+			Away int `json:"away"`
 		} `json:"scores"`
 	} `json:"matchDetails"`
 	Goal       []Goal       `json:"goal"`
 	Card       []Card       `json:"card"`
 	Substitute []Substitute `json:"substitute"`
-	LineUp     []LineUp     `json:"lineUp"`
+	LineUp     []Lineup     `json:"lineUp"`
 }
 
-type LineUp struct {
+type Lineup struct {
 	ContestantId string `json:"contestantId"`
 	Player       []struct {
 		PlayerId     string `json:"playerId"`
@@ -107,10 +104,14 @@ type Team struct {
 
 type Contestant struct {
 	Team
-	Position string `json:"position"`
-	Country  struct {
+
+	ShortName    string `json:"shortName"`
+	OfficialName string `json:"officialName"`
+	Code         string `json:"code"`
+	Position     string `json:"position"`
+	Country      struct {
 		Id   string `json:"id"`
-		Name string `json:""`
+		Name string `json:"name"`
 	} `json:"country"`
 }
 
@@ -121,20 +122,13 @@ type Venue struct {
 }
 
 type MatchInfo struct {
-	Id          string `json:"id"`
-	Date        string `json:"date"`
-	Time        string `json:"time"`
-	Week        string `json:"week"`
-	LastUpdated string `json:"lastUpdated"`
-	Description string `json:"description"`
-	//Competition Competition `json:"competition"`
-	TournamentCalendar struct {
-		Id        string `json:"id"`
-		StartDate string `json:"startDate"`
-		EndDate   string `json:"endDate"`
-		Name      string `json:"name"`
-	} `json:"tournamentCalendar"`
-	Stage struct {
+	BaseMatch
+	Week               string          `json:"week"`
+	LastUpdated        string          `json:"lastUpdated"`
+	Description        string          `json:"description"`
+	Competition        BaseCompetition `json:"competition"`
+	TournamentCalendar BaseSeason      `json:"tournamentCalendar"`
+	Stage              struct {
 		Id        string `json:"id"`
 		FormatId  string `json:"formatId"`
 		StartDate string `json:"startDate"`
